@@ -1,3 +1,5 @@
+import { ESwitchCases } from "./enums";
+
 export interface IDailyCases {
   date: string;
   new_cases: number;
@@ -5,6 +7,8 @@ export interface IDailyCases {
   stringency_index: number;
   total_cases: number;
   total_cases_per_million: number;
+  new_deaths: string;
+  total_deaths: string;
 }
 
 export interface ICountryData {
@@ -23,4 +27,16 @@ export interface ICountryData {
   median_age: number;
   population: number;
   population_density: number;
+}
+
+export interface ICountryIndex {
+  label: string;
+  index: string;
+}
+
+export interface IChartsContextValues {
+  reportedChart: {
+    deathCases: ESwitchCases;
+    dailyValues: string;
+  };
 }
