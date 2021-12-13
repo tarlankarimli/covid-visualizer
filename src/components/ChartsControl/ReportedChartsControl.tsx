@@ -1,14 +1,15 @@
-import { useState, useContext, useEffect } from "react";
+import { useState, useContext } from "react";
 import FormGroup from "@mui/material/FormGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Switch from "@mui/material/Switch";
-import { ChartControlsContex } from "src/context/ChartsControl";
+import { Box } from "@mui/system";
+
+import { LineChartControlContex } from "src/context/LineChartControl";
 import { ESwitchCases } from "src/enums";
 import {
   CHARTS_VALUES_FIELDS,
   IChartsValuesFields,
 } from "src/views/Statistics/fields";
-import { Box } from "@mui/system";
 
 const initialValues: any = {
   deathCases: true,
@@ -17,21 +18,21 @@ const initialValues: any = {
 
 const ReportedChartsControl = () => {
   const [switchesCheckValue, setSwitchesCheckValue] = useState(initialValues);
-  const { chartsControlValues, setChartsControlValues } = useContext(
-    ChartControlsContex
+  const { lineChartControlValues, setLineChartControlValues } = useContext(
+    LineChartControlContex
   );
 
   const deathCases: keyof IChartsValuesFields =
-    chartsControlValues.reportedChart.deathCases;
+    lineChartControlValues?.deathCases;
   const dailyValues: keyof IChartsValuesFields =
-    chartsControlValues.reportedChart.dailyValues;
+    lineChartControlValues?.dailyValues;
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { checked, value, id } = event.target;
     switchesCheckValue[id] = checked;
     setSwitchesCheckValue({ ...switchesCheckValue });
-    chartsControlValues.reportedChart[id] = value;
-    setChartsControlValues({ ...chartsControlValues });
+    lineChartControlValues[id] = value;
+    setLineChartControlValues({ ...lineChartControlValues });
   };
 
   return (
@@ -51,7 +52,7 @@ const ReportedChartsControl = () => {
               inputProps={{ "aria-label": "controlled" }}
             />
           }
-          label={deathCases && CHARTS_VALUES_FIELDS[deathCases].label}
+          label={CHARTS_VALUES_FIELDS[deathCases].label}
         />
         <FormControlLabel
           control={
@@ -67,7 +68,7 @@ const ReportedChartsControl = () => {
               inputProps={{ "aria-label": "controlled" }}
             />
           }
-          label={dailyValues && CHARTS_VALUES_FIELDS[dailyValues].label}
+          label={CHARTS_VALUES_FIELDS[dailyValues].label}
         />
       </Box>
     </FormGroup>

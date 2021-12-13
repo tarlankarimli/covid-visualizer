@@ -1,25 +1,28 @@
 import * as React from "react";
 import { useEffect, useState } from "react";
-import { Box, Container, Divider } from "@mui/material";
+import {
+  Box,
+  CircularProgress,
+  Container,
+  Divider,
+  Stack,
+} from "@mui/material";
 import Tab from "@mui/material/Tab";
 import Tabs from "@mui/material/Tabs";
 
-import { getCovidData } from "src/api";
 import RankedCharts from "src/components/RankedCharts/RankedCharts";
 import ReportedCases from "src/components/ReportCharts/ReportedCases";
-import SelectCountry from "src/components/SelectCountry";
 import ChartsControlPanel from "src/components/ChartsControl";
+import { CovidDataContext } from "src/context/CovidDataContext";
+import SelectCountry from "src/components/SelectCountry";
 import { ICountryIndex } from "src/models";
 
 function CovidStatistics() {
-  const [covidData, setCovidData] = useState<any>();
   const [countryIndex, setCountryIndex] = useState<ICountryIndex[]>();
   const [selectedCountry, setSelectedCountry] = useState<string>("OWID_WRL");
   const [reportTab, setReportTab] = React.useState(0);
 
-  useEffect(() => {
-    getCovidData().then((res) => setCovidData(res.data));
-  }, []);
+  const { covidData } = React.useContext(CovidDataContext);
 
   useEffect(() => {
     if (covidData) {
@@ -41,29 +44,36 @@ function CovidStatistics() {
   return (
     <div>
       <Container fixed>
-        <Box sx={{ bgcolor: "#cfe8fc", height: "100vh" }}>
-          <SelectCountry
-            countryIndex={countryIndex}
-            setSelectedCountry={setSelectedCountry}
-          />
-          <Box sx={{ width: "100%" }}>
-            <Tabs value={reportTab} onChange={handleChange} centered>
-              <Tab label="Reported Cases" />
-              <Tab label="Ranked Charts" />
-            </Tabs>
-          </Box>
-          <Box mb={10}>
-            {reportTab ? (
-              <RankedCharts />
-            ) : (
-              <ReportedCases
-                countryData={covidData && covidData[selectedCountry]}
+        {!covidData ? (
+          <Stack alignItems="center">
+            <CircularProgress size={100} />
+          </Stack>
+        ) : (
+          <Box sx={{ height: "100%" }}>
+            <Box sx={{ display: "flex", justifyContent: "end", mb: 5 }}>
+              <SelectCountry
+                countryIndex={countryIndex}
+                setSelectedCountry={setSelectedCountry}
               />
-            )}
+            </Box>
+            <Box sx={{ width: "100%" }}>
+              <Tabs value={reportTab} onChange={handleChange} centered>
+                <Tab label="Reported Cases" />
+                <Tab label="Ranked Charts" />
+              </Tabs>
+            </Box>
+
+            <Box mb={5}>
+              {reportTab ? (
+                <RankedCharts />
+              ) : (
+                <ReportedCases selectedCountry={selectedCountry} />
+              )}
+            </Box>
+            <Divider variant="middle" />
+            <ChartsControlPanel reportTab={reportTab} />
           </Box>
-          <Divider variant="middle" />
-          <ChartsControlPanel />
-        </Box>
+        )}
       </Container>
     </div>
   );

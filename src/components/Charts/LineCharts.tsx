@@ -10,27 +10,28 @@ import {
   Legend,
 } from "chart.js";
 import { Line } from "react-chartjs-2";
-import { ICountryData } from "src/models";
-import { getDateRange } from "src/utils/modifiedData";
-import { ChartControlsContex } from "src/context/ChartsControl";
+import { LineChartControlContex } from "src/context/LineChartControl";
+import { CovidDataContext } from "src/context/CovidDataContext";
+import { getDataRangeByKey } from "src/utils/modifiedData";
 import {
   CHARTS_VALUES_FIELDS,
   IChartsValuesFields,
 } from "src/views/Statistics/fields";
 
 interface IProps {
-  countryData: ICountryData;
+  selectedCountry: string;
 }
 const LineCharts: React.FC<IProps> = (props: IProps) => {
-  const { countryData } = props;
+  const { selectedCountry } = props;
 
-  const { chartsControlValues } = useContext(ChartControlsContex);
-
+  const { covidData } = React.useContext(CovidDataContext);
+  const { lineChartControlValues } = useContext(LineChartControlContex);
+  const countryData = covidData && covidData[selectedCountry];
   const deathCases: keyof IChartsValuesFields =
-    chartsControlValues.reportedChart.deathCases;
+    lineChartControlValues.deathCases;
 
   const dailyValues: keyof IChartsValuesFields =
-    chartsControlValues.reportedChart.dailyValues;
+    lineChartControlValues.dailyValues;
 
   ChartJS.register(
     CategoryScale,
@@ -71,21 +72,21 @@ const LineCharts: React.FC<IProps> = (props: IProps) => {
       },
     },
   };
-  const labels = getDateRange(countryData, "date");
+  const labels = getDataRangeByKey(countryData, "date");
 
   const data = {
     labels,
     datasets: [
       {
         label: CHARTS_VALUES_FIELDS[deathCases].label,
-        data: getDateRange(countryData, deathCases),
+        data: getDataRangeByKey(countryData, deathCases),
         borderColor: "rgb(255, 99, 132)",
         backgroundColor: "rgba(255, 99, 132, 0.5)",
         yAxisID: "y",
       },
       {
         label: CHARTS_VALUES_FIELDS[dailyValues].label,
-        data: getDateRange(countryData, dailyValues),
+        data: getDataRangeByKey(countryData, dailyValues),
         borderColor: "rgb(53, 162, 235)",
         backgroundColor: "rgba(53, 162, 235, 0.5)",
         yAxisID: "y1",

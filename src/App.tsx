@@ -4,8 +4,9 @@ import Box from "@mui/material/Box";
 import { useTheme, ThemeProvider, createTheme } from "@mui/material/styles";
 import Brightness4Icon from "@material-ui/icons/Brightness4";
 import Brightness7Icon from "@material-ui/icons/Brightness7";
-import "./App.css";
 import CovidStatistics from "./views/Statistics/Page";
+
+import "./App.scss";
 
 const ColorModeContext = React.createContext({ toggleColorMode: () => {} });
 
@@ -17,11 +18,11 @@ function App() {
       <div>
         <Box
           sx={{
-            width: "100%",
-            height: '100%',
             bgcolor: "background.default",
             color: "text.primary",
             borderRadius: 1,
+            textAlign: "right",
+            height: "100vh",
             p: 3,
           }}
         >
@@ -37,7 +38,7 @@ function App() {
               <Brightness4Icon />
             )}
           </IconButton>
-          <CovidStatistics/>
+          <CovidStatistics />
         </Box>
       </div>
     </>

@@ -1,5 +1,6 @@
 export type TChartsValuesFields = IChartsValuesFields;
 
+/** Chart values fields */
 export interface IChartsValuesFields {
   new_deaths: {
     label: string;
@@ -21,7 +22,7 @@ export const CHARTS_VALUES_FIELDS: TChartsValuesFields = {
     label: "New deaths",
   },
   total_deaths: {
-    label: "Confirmed cases",
+    label: "Total deaths",
   },
   new_cases: {
     label: "New cases",

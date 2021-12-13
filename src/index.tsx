@@ -1,16 +1,24 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import "./index.css";
-import App from "./App";
 import { BrowserRouter } from "react-router-dom";
-import ChartsControlProvider from "./context/ChartsControl";
+
+import App from "./App";
+import BarChartControlProvider from "./context/BarChartControl";
+import CovidDataProvider from "./context/CovidDataContext";
+import LineChartControlProvider from "./context/LineChartControl";
+
+import "./index.css";
 
 ReactDOM.render(
   <React.StrictMode>
     <BrowserRouter>
-      <ChartsControlProvider>
-        <App />
-      </ChartsControlProvider>
+      <CovidDataProvider>
+        <LineChartControlProvider>
+          <BarChartControlProvider>
+            <App />
+          </BarChartControlProvider>
+        </LineChartControlProvider>
+      </CovidDataProvider>
     </BrowserRouter>
   </React.StrictMode>,
   document.getElementById("root")

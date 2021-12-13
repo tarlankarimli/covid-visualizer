@@ -1,8 +1,7 @@
-import React from "react";
-import LineCharts from "../Charts/LineCharts";
+import BarChart from "../Charts/BarChart";
 
 const RankedCharts = () => {
-  return <div></div>;
+  return <BarChart />;
 };
 
 export default RankedCharts;
